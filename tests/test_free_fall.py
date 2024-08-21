@@ -9,18 +9,20 @@
 # - Created by Tran Viet Thanh on 2024/08/01
 
 # Standard libraries
+import sys
 import numpy as np
 from matplotlib import pyplot as plt
 
 # Internal libraries
-from samplers.random_sampler import RandomSampler
-from models.free_fall import Fall
+sys.path.append('../')
+from samplers.random_sampler import RandomSampler  # noqa: E402
+from models.free_fall import Fall  # noqa: E402
 
 
 def main():
-    fall = Fall()
+    model = Fall()
 
-    random_sampler = RandomSampler(fall)
+    random_sampler = RandomSampler(model)
 
     T = 10  # s
 
@@ -36,21 +38,25 @@ def main():
 
     new_initial_condition = np.array([*initial_position, *initial_velocity])
 
-    new_trajectories = fall.simulate(
+    new_trajectories = model.simulate(
         np.array([*new_initial_condition, 9.81]), T, dt)
 
     prior_knowledge = np.vstack([initial_conditions, np.ones(N)])
 
-    g = np.linalg.inv(prior_knowledge) @ np.array([
+    g = np.linalg.pinv(prior_knowledge) @ np.array([
         *new_initial_condition, 1])
 
     predicted_trajectory = trajectories @ g
-
+    print(new_initial_condition)
+    print(predicted_trajectory[:, 0])
     plt.plot(predicted_trajectory[0, :], predicted_trajectory[2, :], 'r')
+
     plt.plot(new_trajectories[:, 0], new_trajectories[:, 2], '--b')
 
     plt.title('Comparison between predicted and actual trajectories')
+
     plt.xlabel('Position x (m)')
+
     plt.ylabel('Position y (m)')
 
     plt.tight_layout()

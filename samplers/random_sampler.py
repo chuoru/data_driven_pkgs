@@ -14,34 +14,54 @@ import numpy as np
 class RandomSampler:
     """! Random sampler
     """
-
+    # ============================================================================
+    # PUBLIC METHODS
+    # ============================================================================
     def __init__(self, model):
         """! Constructor
         """
         self._model = model
 
-    def sample(self, T, N, dt):
+    def sample(self, T, N, dt, has_input=False):
         """! Sample
         @param T: The time
         @param N: The number of samples
+        @param dt: The time step
+        @param input: The input of the system
         """
         trajectories = []
 
         initial_conditions = []
 
         for _ in range(N):
-            initial_position = np.random.rand(2)
+            intial_condition, state = self._model.sample()
 
-            initial_velocity = np.random.rand(2)
-
-            intial_condition = np.array([*initial_position, *initial_velocity])
-
-            state = np.array([*intial_condition, 9.81])
-
-            outputs = self._model.simulate(state, T, dt)
+            outputs = self._simulate(state, T, dt, has_input)
 
             trajectories.append(outputs)
 
             initial_conditions.append(intial_condition)
 
         return np.array(initial_conditions).T, np.array(trajectories).T
+
+    # ============================================================================
+    # PRIVATE METHODS
+    # ============================================================================
+    def _simulate(self, state, T, dt, has_input):
+        """! Simulate
+        @param state: The state of the system
+        @param T: The time
+        @param dt: The time step
+        @param has_input: The input of the system
+        @return The output of the system
+        """
+        input = 0
+
+        if has_input:
+            input = np.random.rand(self._model._nu)
+
+            input = [0.5, 0.1]
+
+        outputs = self._model.simulate(state, T, dt, input)
+
+        return outputs

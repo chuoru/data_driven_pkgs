@@ -51,12 +51,18 @@ class DifferentialDrive:
 
         return next_state
 
-    def simulate(self, state, input, T, dt):
+    def sample(self):
+        """! Sample state
+        @return A random state
+        """
+        return np.random.rand(self._nx), np.random.rand(self._nx)
+
+    def simulate(self, state, T, dt, input):
         """! Simulate
         @param state: The state of the system
-        @param input: The input of the system
         @param T: The time
         @param dt: The time step
+        @param input: The input of the system
         @return The output of the system
         """
         t = np.arange(0, T, dt)

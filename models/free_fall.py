@@ -70,6 +70,20 @@ class Fall:
 
         return output[-1], state[-1]
 
+    def sample(self):
+        """! Sample state
+        @return A random state
+        """
+        initial_position = np.random.rand(2)
+
+        initial_velocity = np.random.rand(2)
+
+        intial_condition = np.array([*initial_position, *initial_velocity])
+
+        state = np.array([*intial_condition, 9.81])
+
+        return intial_condition, state
+
     def simulate(self, state, T, dt, input=0):
         """! Simulate
         @param state: The state of the system
