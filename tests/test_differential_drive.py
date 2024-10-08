@@ -36,7 +36,7 @@ def main():
     new_initial_condition = np.random.rand(3)
 
     new_trajectories = model.simulate(
-        new_initial_condition, T, dt, [0.5, 0.1])
+        new_initial_condition, dt * 3, dt, [0.5, 0.1])
 
     prior_knowledge = np.vstack([initial_conditions, np.ones(N)])
 
@@ -52,7 +52,7 @@ def main():
     plt.title('Comparison between predicted and actual trajectories')
 
     plt.xlabel('Position x (m)')
-    
+
     plt.ylabel('Position y (m)')
 
     plt.tight_layout()

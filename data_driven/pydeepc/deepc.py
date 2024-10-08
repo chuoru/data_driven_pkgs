@@ -1,3 +1,4 @@
+# flake8: noqa
 # Standard libraries
 import math
 import numpy as np

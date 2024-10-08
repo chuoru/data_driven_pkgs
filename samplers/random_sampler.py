@@ -64,4 +64,7 @@ class RandomSampler:
 
         outputs = self._model.simulate(state, T, dt, input)
 
+        if has_input:
+            outputs = input + outputs
+
         return outputs
